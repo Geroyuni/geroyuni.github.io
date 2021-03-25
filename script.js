@@ -3,9 +3,18 @@ let body = document.querySelector("body");
 let category_checkboxes = document.querySelector(".checkboxes.category")
 body.append(qa_items);
 
-let template_text = document.querySelector(".template_text").addEventListener("change", (event) => {
+// Get default.txt into the template text box
+let client = new XMLHttpRequest();
+client.open('GET', '/default.txt');
+client.onreadystatechange = function () {
+    document.querySelector(".template_text").value = client.responseText;
+    on_change();
+}
+client.send();
+
+let on_change = () => {
     let categories = Array();
-    let text = event.target.value;
+    let text = document.querySelector(".template_text").value;
 
     text.split("\n").forEach((line) => {
         let item;
@@ -73,8 +82,9 @@ let template_text = document.querySelector(".template_text").addEventListener("c
         category_checkboxes.append(label);
         category_checkboxes.append(document.createElement("br"));
     })
-});
+}
 
+document.querySelector(".template_text").addEventListener("change", on_change);
 
 document.querySelector(".checkboxes.type").addEventListener("change", (event) => {
     document.querySelectorAll("li").forEach((item) => {

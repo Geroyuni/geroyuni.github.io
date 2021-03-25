@@ -1,0 +1,9 @@
+## App Tests
+-e Make sure the app opens
+-t Make sure the app opens and closes
+-d Make sure the app opens and closes multiple times
+
+## Encoder Tests
+-e Test h264 works
+-e Test h265 works
+-e other
