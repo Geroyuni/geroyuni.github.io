@@ -4,19 +4,17 @@
 body {
     padding-left: 10%;
     padding-right: 10%;
-    padding-top: 64px;
-    margin: 0;
-    height: 100vh;
+    padding-top: 100px;
+    padding-bottom: 60px;
+    max-width: 700px;
+    margin: auto;
     font-family: Roboto, sans-serif;
     color: #2d2e33;
+    line-height: 1.6
 }
 
 li {
     list-style-type: none;
-}
-
-p {
-    max-width: 600px;
 }
 
 button {
@@ -34,10 +32,15 @@ button:hover {
     background: #7d86b1;
 }
 
+.setup {
+    display: flex;
+    margin-bottom: 60px;
+    min-height: 200px;
+}
+
 .template_text {
     padding: 8px;
-    width: 400px;
-    min-height: 200px;
+    flex-grow: 2;
     font-family: Roboto Mono, sans-serif;
     border-color: #e6e6e6;
     background-color: #fafafa;
@@ -45,14 +48,10 @@ button:hover {
     margin-right: 12px;
 }
 
-.main {
+.settings {
     display: inline-block;
     padding: 16px 32px 32px 32px;
     background-color: #f0f0f0;
     border-radius: 3px;
-    min-height: 200px;
-}
-
-.setup {
-    display: flex;
+    max-width: 290px;
 }

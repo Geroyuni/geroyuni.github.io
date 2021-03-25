@@ -1,19 +1,20 @@
-let qa_items = document.createElement("main");
 let body = document.querySelector("body");
-let category_checkboxes = document.querySelector(".checkboxes.category")
-body.append(qa_items);
+let categories = document.querySelector(".categories");
+let section_area = document.createElement("div");
+body.append(section_area);
 
 // Get default.txt into the template text box
 let client = new XMLHttpRequest();
 client.open('GET', '/default.txt');
 client.onreadystatechange = function () {
     document.querySelector(".template_text").value = client.responseText;
-    on_change();
+    update_categories_settings();
 }
 client.send();
 
-let on_change = () => {
-    let categories = Array();
+// Listener function for "Categories" settings
+let update_categories_settings = () => {
+    let sections = Array();
     let text = document.querySelector(".template_text").value;
 
     text.split("\n").forEach((line) => {
@@ -24,9 +25,9 @@ let on_change = () => {
 
         switch (type) {
             case "##":
-                category = document.createElement("div");
-                category.classList.add("category_list");
-                categories.push(category);
+                section = document.createElement("div");
+                section.classList.add("section");
+                sections.push(section);
 
                 item = document.createElement("h2");
                 item.innerHTML = content;
@@ -47,21 +48,21 @@ let on_change = () => {
                 item.innerHTML = `<input type="checkbox"> ${content}`;
                 break;
             default:
-                console.log(`Doesn't have a case: '${type} | ${content}'`);
+                console.log(`Section of template being ignored: '${type} ${content}'`);
                 return;
         }
-        categories[categories.length - 1].append(item)
+        sections[sections.length - 1].append(item)
 
-        qa_items.innerHTML = ""
+        section_area.innerHTML = ""
 
-        categories.forEach((category) => {
-            qa_items.append(category);
+        sections.forEach((section) => {
+            section_area.append(section);
         });
     });
 
-    category_checkboxes.innerHTML = "<p>Categories:</p>"
+    categories.innerHTML = "<p>Categories:</p>"
 
-    document.querySelectorAll(".category_list").forEach((item) => {
+    document.querySelectorAll(".section").forEach((item) => {
         let inner_text = item.querySelector("h2").innerText;
 
         let checkbox = document.createElement("input");
@@ -78,15 +79,17 @@ let on_change = () => {
             item.style = (event.target.checked) ? "" : "display: none;";
         });
 
-        category_checkboxes.append(checkbox);
-        category_checkboxes.append(label);
-        category_checkboxes.append(document.createElement("br"));
+        categories.append(checkbox);
+        categories.append(label);
+        categories.append(document.createElement("br"));
     })
 }
 
-document.querySelector(".template_text").addEventListener("change", on_change);
+// Add listener for "Categories" settings
+document.querySelector(".template_text").addEventListener("change", update_categories_settings);
 
-document.querySelector(".checkboxes.type").addEventListener("change", (event) => {
+// Add listener for "Types" settings
+document.querySelector(".types").addEventListener("change", (event) => {
     document.querySelectorAll("li").forEach((item) => {
         switch (event.target.value) {
             case "nocategory":
@@ -112,48 +115,25 @@ document.querySelector(".checkboxes.type").addEventListener("change", (event) =>
     });
 });
 
-category_checkboxes = document.querySelector(".checkboxes.category")
-
-document.querySelectorAll(".category_list").forEach((item) => {
-    let text = item.querySelector("h2").innerText;
-
-    let checkbox = document.createElement("input");
-    checkbox.type = "checkbox";
-    checkbox.name = text;
-    checkbox.value = text;
-    checkbox.checked = true;
-
-    let label = document.createElement("label");
-    label.setAttribute("for", text);
-    label.innerText = text;
-
-    checkbox.addEventListener("change", (event) => {
-        item.style = (event.target.checked) ? "" : "display: none;";
-    });
-
-    category_checkboxes.append(checkbox);
-    category_checkboxes.append(label);
-    category_checkboxes.append(document.createElement("br"));
-})
-
-document.querySelector(".markdown_clipboard").addEventListener("click", (event) => {
+// Copy Markdown button
+document.querySelector(".clipboard").addEventListener("click", (event) => {
     let markdown_text = ""
 
-    document.querySelectorAll(".category_list").forEach((category) => {
-        if (category.style.display === "") {
-            items = category.children
+    document.querySelectorAll(".section").forEach((section) => {
+        if (section.style.display === "") {
+            items = section.children
             for (var i = 0; i < items.length; i++) {
                 var item = items[i];
                 if (item.style.display === "") {
                     switch (item.nodeName) {
                         case "H2":
-                            markdown_text += `\n## ${item.innerText}\n\n`;
+                            markdown_text += `\n## ${item.innerText}\n`;
                             break;
                         case "LI":
                             if (item.firstChild.checked) {
-                                markdown_text += `- [x] ${item.innerText}\n`;
+                                markdown_text += `- [x]${item.innerText}\n`;
                             } else {
-                                markdown_text += `- [ ] ${item.innerText}\n`;
+                                markdown_text += `- [ ]${item.innerText}\n`;
                             }
                             break;
                     }
