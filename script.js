@@ -1,17 +1,3 @@
-// Find a way to get this later
-text = `## App Tests
--e Make sure the app opens
--t Make sure the app opens and closes
--d Make sure the app opens and closes multiple times
-
-## Encoder Tests
--e Test h264 works
--e Test h265 works
-
-## Non-testing Tests
--e Eat food
--e Eat food again`
-
 let qa_items = document.createElement("main");
 let body = document.querySelector("body");
 let category_checkboxes = document.querySelector(".checkboxes.category")
