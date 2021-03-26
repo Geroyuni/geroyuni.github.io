@@ -83,6 +83,26 @@ let update_categories_settings = () => {
         categories.append(label);
         categories.append(document.createElement("br"));
     })
+
+    hide_empty_section_headers()
+}
+
+// Hide any section that has no bullet points
+let hide_empty_section_headers = () => {
+    document.querySelectorAll(".section").forEach((section) => {
+        let items = section.children
+        let h2 = section.firstChild
+        let is_empty = Array()
+
+        for (var i = 0; i < items.length; i++) {
+            var item = items[i];
+            if (item.nodeName === "LI") {
+                is_empty.push(item.style.display !== "");
+            }
+        }
+
+        h2.style = (is_empty.every(v => v === true)) ? "display: none;" : ""
+    });
 }
 
 // Add listener for "Categories" settings
@@ -90,6 +110,7 @@ document.querySelector(".template_text").addEventListener("change", update_categ
 
 // Add listener for "Types" settings
 document.querySelector(".types").addEventListener("change", (event) => {
+    // Update bullet lists
     document.querySelectorAll("li").forEach((item) => {
         switch (event.target.value) {
             case "nocategory":
@@ -113,6 +134,8 @@ document.querySelector(".types").addEventListener("change", (event) => {
                 break;
         }
     });
+
+    hide_empty_section_headers()
 });
 
 // Copy Markdown button
@@ -121,7 +144,7 @@ document.querySelector(".clipboard").addEventListener("click", (event) => {
 
     document.querySelectorAll(".section").forEach((section) => {
         if (section.style.display === "") {
-            items = section.children
+            let items = section.children
             for (var i = 0; i < items.length; i++) {
                 var item = items[i];
                 if (item.style.display === "") {
