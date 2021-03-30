@@ -4,13 +4,10 @@ let section_area = document.createElement("div");
 body.append(section_area);
 
 // Get default.txt into the template text box
-let client = new XMLHttpRequest();
-client.open('GET', '/default.txt');
-client.onreadystatechange = function () {
-    document.querySelector(".template_text").value = client.responseText;
+fetch("default.txt").then((response) => response.text()).then((response) => {
+    document.querySelector(".template_text").value = response
     update_categories_settings();
-}
-client.send();
+});
 
 // Listener function for "Categories" settings
 let update_categories_settings = () => {
